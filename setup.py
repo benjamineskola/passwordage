@@ -9,7 +9,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="passwordage",
-    version="0.1.1",
+    version="0.2.0",
     description="Query 1password for the oldest passwords",
     long_description=long_description,
     long_description_content_type="text/markdown",
