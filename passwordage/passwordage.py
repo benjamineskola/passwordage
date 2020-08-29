@@ -28,7 +28,10 @@ def process_item(item: dict):
         # don't bother checking password history if they're less than a year old
         full_item = load_data(item["uuid"])
 
-        if "passwordHistory" in full_item["details"]:
+        if (
+            "passwordHistory" in full_item["details"]
+            and full_item["details"]["passwordHistory"]
+        ):
             # item has more than one password
             newest_password = max(
                 [p["time"] for p in full_item["details"]["passwordHistory"]]
