@@ -18,7 +18,7 @@ setup(
     author_email="ben@eskola.uk",
     license="Creative Commons Attribution-NonCommercial 4.0 International",
     classifiers=["License :: Free for non-commercial use"],
-    py_modules=["passwordage"],
+    packages=find_packages(),
     python_requires=">=3.5, <4",
     install_requires=[],
     entry_points={"console_scripts": ["passwordage=passwordage:main"]},
