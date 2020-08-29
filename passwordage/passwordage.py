@@ -51,28 +51,33 @@ def process_item(item: dict):
         print(f"No ainfo for {full_item['overview']['title']}", file=sys.stderr)
 
 
-if os.path.isfile("passwords.json"):
-    results = json.load(open("passwords.json"))
-else:
-    data = load_data()
+def main():
+    if os.path.isfile("passwords.json"):
+        results = json.load(open("passwords.json"))
+    else:
+        data = load_data()
 
-    results = [process_item(i) for i in data]
-    results = [i for i in results if i]
+        results = [process_item(i) for i in data]
+        results = [i for i in results if i]
 
-    results.sort(key=lambda k: k["date"])
-    json.dump(results, open("passwords.json", "w"))
+        results.sort(key=lambda k: k["date"])
+        json.dump(results, open("passwords.json", "w"))
 
-for login in results:
-    if "todelete" in login["tags"]:
-        continue
+    for login in results:
+        if "todelete" in login["tags"]:
+            continue
 
-    date = datetime.datetime.fromtimestamp(login["date"])
+        date = datetime.datetime.fromtimestamp(login["date"])
 
-    print(login["site"], end="")
-    site_logins = [
-        i for i in results if i["site"].casefold() == login["site"].casefold()
-    ]
+        print(login["site"], end="")
+        site_logins = [
+            i for i in results if i["site"].casefold() == login["site"].casefold()
+        ]
 
-    if len(site_logins) > 1:
-        print(f" ({login['userid']})", end="")
-    print(f": {date} ({now - date})")
+        if len(site_logins) > 1:
+            print(f" ({login['userid']})", end="")
+        print(f": {date} ({now - date})")
+
+
+if __name__ == "__main__":
+    main()

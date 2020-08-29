@@ -1,0 +1,1 @@
+from .passwordage import main
