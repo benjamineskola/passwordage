@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 now = datetime.datetime.now()
-ts = int(now.strftime("%s"))
+ts = int(now.timestamp())
 
 
 def load_data(uuid=None):
@@ -58,7 +58,9 @@ def main():
         os.environ["XDG_CACHE_HOME"], "passwordage", "passwords.json"
     )
 
-    if os.path.isfile(cachefile):
+    if os.path.isfile(cachefile) and (
+        (os.stat(cachefile).st_mtime - ts) < (60 * 60 * 24)
+    ):
         results = json.load(open(cachefile))
     else:
         data = load_data()
