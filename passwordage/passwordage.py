@@ -52,8 +52,14 @@ def process_item(item: dict):
 
 
 def main():
-    if os.path.isfile("passwords.json"):
-        results = json.load(open("passwords.json"))
+    if not "XDG_CACHE_HOME" in os.environ:
+        os.environ["XDG_CACHE_HOME"] = os.path.join(os.environ["HOME"], ".cache")
+    cachefile = os.path.join(
+        os.environ["XDG_CACHE_HOME"], "passwordage", "passwords.json"
+    )
+
+    if os.path.isfile(cachefile):
+        results = json.load(open(cachefile))
     else:
         data = load_data()
 
@@ -61,7 +67,7 @@ def main():
         results = [i for i in results if i]
 
         results.sort(key=lambda k: k["date"])
-        json.dump(results, open("passwords.json", "w"))
+        json.dump(results, open(cachefile, "w"))
 
     for login in results:
         if "todelete" in login["tags"]:
