@@ -9,13 +9,37 @@ now = datetime.datetime.now()
 ts = int(now.timestamp())
 
 
+def signin():
+    cmd = subprocess.run(["op", "signin", "-r", "my"], stdout=subprocess.PIPE)
+    token = cmd.stdout
+    os.environ["OP_SESSION_my"] = token.decode().strip()
+
+
+def run_command(command):
+    attempts = 0
+    while attempts < 3 and (
+        result := subprocess.run(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+    ):
+        if "ERROR" not in result.stderr.decode():
+            return json.loads(result.stdout)
+        signin()
+        attempts += 1
+
+    print(f"Failed to sign in {attempts} times, aborting", file=sys.stderr)
+    sys.exit(1)
+
+
 def load_data(uuid=None):
     if uuid:
         command = ["op", "get", "item", uuid]
     else:
         command = ["op", "list", "items"]
 
-    return json.loads(subprocess.run(command, stdout=subprocess.PIPE).stdout)
+    if "OP_SESSION_my" not in os.environ:
+        signin()
+    return run_command(command)
 
 
 def process_item(item: dict):
