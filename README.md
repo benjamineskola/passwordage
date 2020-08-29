@@ -12,7 +12,7 @@ pip install git+https://gitlab.com/benjamineskola/passwordage#egg=passwordage
 
 ## Usage
 
-```
+```bash
 $ eval $(op signin my)  # or `eval (op signin my)` for fish.
 
 $ passwordage
