@@ -93,7 +93,7 @@ def main():
 
         results.sort(key=lambda k: k["date"])
         if not os.path.exists(cachedir):
-            os.path.makedirs(cachedir)
+            os.makedirs(cachedir)
         json.dump(results, open(cachefile, "w"))
 
     for login in results:
