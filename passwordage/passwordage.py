@@ -4,6 +4,8 @@ import json
 import os
 import subprocess
 import sys
+from optparse import OptionParser
+
 
 now = datetime.datetime.now()
 ts = int(now.timestamp())
@@ -75,7 +77,7 @@ def process_item(item: dict):
         print(f"No ainfo for {full_item['overview']['title']}", file=sys.stderr)
 
 
-def main():
+def main(older_than=0):
     if not "XDG_CACHE_HOME" in os.environ:
         os.environ["XDG_CACHE_HOME"] = os.path.join(os.environ["HOME"], ".cache")
     cachedir = os.path.join(os.environ["XDG_CACHE_HOME"], "passwordage")
@@ -102,6 +104,9 @@ def main():
 
         date = datetime.datetime.fromtimestamp(login["date"])
 
+        if now - date < datetime.timedelta(days=older_than):
+            continue
+
         print(login["site"], end="")
         site_logins = [
             i for i in results if i["site"].casefold() == login["site"].casefold()
@@ -113,4 +118,13 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = OptionParser()
+    parser.add_option(
+        "-o",
+        "--older-than",
+        type="int",
+        help="show only passwords older than DAYS",
+        metavar="DAYS",
+    )
+    (options, args) = parser.parse_args()
+    main(older_than=options.older_than)
