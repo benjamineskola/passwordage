@@ -114,7 +114,7 @@ def main(older_than=0):
 
         if len(site_logins) > 1:
             print(f" ({login['userid']})", end="")
-        print(f": {date} ({now - date})")
+        print(f": {date.strftime('%d %b %Y')} ({(now - date).days} days)")
 
 
 if __name__ == "__main__":
