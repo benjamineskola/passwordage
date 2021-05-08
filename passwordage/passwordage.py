@@ -82,7 +82,7 @@ def main():
     cachefile = os.path.join(cachedir, "passwords.json")
 
     if os.path.isfile(cachefile) and (
-        (os.stat(cachefile).st_mtime - ts) < (60 * 60 * 24)
+        (ts - os.stat(cachefile).st_mtime) < (60 * 60 * 24)
     ):
         results = json.load(open(cachefile))
     else:
